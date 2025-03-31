@@ -11,7 +11,19 @@ async function fetchLogs(req, res) {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    const paginatedLogs = await paginateResults(Log, page, limit);
+    const { startDate, endDate, search } = req.query;
+
+    let filter = {};
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      if (endDate) filter.createdAt.$lte = new Date(endDate);
+    }
+    if (search) {
+      filter.message = { $regex: search, $options: "i" };
+    }
+
+    const paginatedLogs = await paginateResults(Log, page, limit, filter);
 
     res.json(paginatedLogs);
   } catch (error) {
