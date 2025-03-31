@@ -52,3 +52,7 @@ Request Body:
 {
   "message": "User action log message"
 }
+
+The microservice is available as a pre-built Docker image on Docker Hub. You can pull and run it using:
+docker pull thebully/my-kafka-microservice  
+docker run -p 8080:8080 thebully/my-kafka-microservice  
